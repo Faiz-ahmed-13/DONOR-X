@@ -1,0 +1,14 @@
+﻿__pycache__/
+*.pyc
+*.pyo
+.Python
+env/
+venv/
+.env
+db.sqlite3
+media/
+.DS_Store
+staticfiles/
+donor_donor*
+donor-x_P1/
+documentation/

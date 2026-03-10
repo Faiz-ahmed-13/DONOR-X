@@ -1,0 +1,91 @@
+{% extends 'blood/base.html' %}
+{% block content %}
+
+<style>
+    .prediction-form input[type="number"] {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+        padding: 10px 15px;
+    }
+    .prediction-form input[type="number"]::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    .prediction-card {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 30px;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .prediction-form label {
+        color: white;
+        font-weight: 500;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+    }
+    .form-group {
+        margin-bottom: 25px;
+    }
+    .btn-predict {
+        background: rgba(0, 123, 255, 0.8);
+        border: none;
+        padding: 12px 35px;
+        font-size: 1.1em;
+        transition: all 0.3s ease;
+    }
+    .btn-predict:hover {
+        background: rgba(0, 123, 255, 1);
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="prediction-card">
+                <h2 class="text-center mb-4">Blood Donation Prediction</h2>
+                <form method="post" class="prediction-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="recency">Months since Last Donation:</label>
+                        <input type="number" class="form-control" id="recency" name="recency" required min="0" step="1" placeholder="Enter months">
+                    </div>
+                    <div class="form-group">
+                        <label for="frequency">Total Number of Donations:</label>
+                        <input type="number" class="form-control" id="frequency" name="frequency" required min="0" step="1" placeholder="Enter total donations">
+                    </div>
+                    <div class="form-group">
+                        <label for="monetary">Total Blood Donated (in c.c.):</label>
+                        <input type="number" class="form-control" id="monetary" name="monetary" required min="0" step="1" placeholder="Enter amount in c.c.">
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Months since First Donation:</label>
+                        <input type="number" class="form-control" id="time" name="time" required min="0" step="1" placeholder="Enter months">
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg btn-predict">Predict</button>
+                    </div>
+                </form>
+                
+                {% if prediction is not None %}
+                <div class="mt-4 text-center">
+                    <h3>Prediction Result:</h3>
+                    <div class="alert {% if prediction == 1 %}alert-success{% else %}alert-warning{% endif %} mt-3">
+                        {% if prediction == 1 %}
+                        <h4>Likely to Donate! 🎉</h4>
+                        <p>Based on your donation history, you are likely to donate blood again. Thank you for your continued support!</p>
+                        {% else %}
+                        <h4>May Not Donate</h4>
+                        <p>Based on your donation history, you might not donate this time. Consider the importance of regular blood donation!</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %} 

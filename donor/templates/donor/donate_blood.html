@@ -1,0 +1,90 @@
+{% extends 'blood/base.html' %}
+{% block content %}
+
+<style>
+    .donation-form input[type="number"],
+    .donation-form input[type="text"],
+    .donation-form select,
+    .donation-form textarea {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 10px 15px;
+    }
+    .donation-form input::placeholder,
+    .donation-form textarea::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    .donation-card {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 30px;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .donation-form label {
+        color: white;
+        font-weight: 500;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+    }
+    .form-group {
+        margin-bottom: 25px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="donation-card">
+                <h2 class="text-center mb-4">Blood Donation Form</h2>
+                
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <form method="post" class="donation-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="bloodgroup">Blood Group:</label>
+                        <input type="text" class="form-control" id="bloodgroup" name="bloodgroup" value="{{ donor.bloodgroup }}" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="unit">Units to Donate:</label>
+                        <input type="number" class="form-control" id="unit" name="unit" required min="1" max="5" placeholder="Enter units (1-5)">
+                        <small class="form-text text-muted">Maximum 5 units allowed per donation</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="disease">Do you have any diseases?</label>
+                        <textarea class="form-control" id="disease" name="disease" rows="3" placeholder="Enter any diseases or conditions you have. Write 'None' if you don't have any."></textarea>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit Donation</button>
+                    </div>
+                </form>
+                
+                <div class="mt-4">
+                    <h4>Important Information:</h4>
+                    <ul>
+                        <li>You must be between 18 and 65 years old to donate blood</li>
+                        <li>You must weigh at least 50 kg</li>
+                        <li>You must be in good health at the time of donation</li>
+                        <li>There must be a minimum interval of 56 days between donations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %} 

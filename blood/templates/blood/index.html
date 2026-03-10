@@ -1,0 +1,195 @@
+{% extends 'blood/base.html' %}
+
+{% block content %}
+<style>
+    .stock-card {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        color: white;
+    }
+    .stock-number {
+        font-size: 2em;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    .stock-high { color: #28a745; }
+    .stock-medium { color: #ffc107; }
+    .stock-low { color: #dc3545; }
+
+    /* Fix: dropdown background and help text color for registration pages */
+    select,
+    select option {
+        background-color: #000 !important;
+        color: #fff !important;
+    }
+
+    .helptext,
+    small.helptext,
+    .form-text,
+    small.form-text,
+    p.help-block {
+        color: #fff !important;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-12 text-center mb-4">
+            <h1 class="display-4 text-white mb-3">Welcome to DONOR-X</h1>
+            <p class="lead text-white">A modern platform connecting blood donors with those in need</p>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-lg">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-heartbeat fa-3x text-danger"></i>
+                    </div>
+                    <h3 class="card-title">For Donors</h3>
+                    <p class="card-text">Join our community of life-savers. Your donation can make a difference.</p>
+                    <a href="{% url 'donorlogin' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Donor Login
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-lg">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-hospital fa-3x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">For Patients</h3>
+                    <p class="card-text">Find the blood you need when you need it most.</p>
+                    <a href="{% url 'patientlogin' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Patient Login
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-lg">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-chart-line fa-3x text-success"></i>
+                    </div>
+                    <h3 class="card-title">Blood Donation Prediction</h3>
+                    <p class="card-text">Use our AI-powered system to predict donation likelihood.</p>
+                    <a href="{% url 'predict_donation' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-calculator me-2"></i>Make Prediction
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blood Stock Status -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-lg bg-dark text-white">
+                <div class="card-header bg-gradient">
+                    <h3 class="mb-0"><i class="fas fa-tint me-2"></i>Current Blood Stock Status</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="stock-card text-center">
+                                <h4>A+</h4>
+                                <div class="stock-number {% if blood_stock.A_plus > 30 %}stock-high{% elif blood_stock.A_plus > 15 %}stock-medium{% else %}stock-low{% endif %}">
+                                    {{ blood_stock.A_plus }}
+                                </div>
+                                <p>units available</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stock-card text-center">
+                                <h4>A-</h4>
+                                <div class="stock-number {% if blood_stock.A_minus > 20 %}stock-high{% elif blood_stock.A_minus > 10 %}stock-medium{% else %}stock-low{% endif %}">
+                                    {{ blood_stock.A_minus }}
+                                </div>
+                                <p>units available</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stock-card text-center">
+                                <h4>B+</h4>
+                                <div class="stock-number {% if blood_stock.B_plus > 30 %}stock-high{% elif blood_stock.B_plus > 15 %}stock-medium{% else %}stock-low{% endif %}">
+                                    {{ blood_stock.B_plus }}
+                                </div>
+                                <p>units available</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stock-card text-center">
+                                <h4>B-</h4>
+                                <div class="stock-number {% if blood_stock.B_minus > 20 %}stock-high{% elif blood_stock.B_minus > 10 %}stock-medium{% else %}stock-low{% endif %}">
+                                    {{ blood_stock.B_minus }}
+                                </div>
+                                <p>units available</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stock-card text-center">
+                                <h4>AB+</h4>
+                                <div class="stock-number {% if blood_stock.AB_plus > 15 %}stock-high{% elif blood_stock.AB_plus > 8 %}stock-medium{% else %}stock-low{% endif %}">
+                                    {{ blood_stock.AB_plus }}
+                                </div>
+                                <p>units available</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stock-card text-center">
+                                <h4>AB-</h4>
+                                <div class="stock-number {% if blood_stock.AB_minus > 10 %}stock-high{% elif blood_stock.AB_minus > 5 %}stock-medium{% else %}stock-low{% endif %}">
+                                    {{ blood_stock.AB_minus }}
+                                </div>
+                                <p>units available</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stock-card text-center">
+                                <h4>O+</h4>
+                                <div class="stock-number {% if blood_stock.O_plus > 40 %}stock-high{% elif blood_stock.O_plus > 20 %}stock-medium{% else %}stock-low{% endif %}">
+                                    {{ blood_stock.O_plus }}
+                                </div>
+                                <p>units available</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stock-card text-center">
+                                <h4>O-</h4>
+                                <div class="stock-number {% if blood_stock.O_minus > 20 %}stock-high{% elif blood_stock.O_minus > 10 %}stock-medium{% else %}stock-low{% endif %}">
+                                    {{ blood_stock.O_minus }}
+                                </div>
+                                <p>units available</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Refresh blood stock every 30 seconds
+setInterval(function() {
+    fetch(window.location.href)
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newStockStatus = doc.querySelector('.card.shadow-lg.bg-dark');
+            const currentStockStatus = document.querySelector('.card.shadow-lg.bg-dark');
+            currentStockStatus.innerHTML = newStockStatus.innerHTML;
+        });
+}, 30000);
+</script>
+{% endblock %}

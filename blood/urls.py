@@ -1,0 +1,30 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home_view, name='home'),
+    path('afterlogin/', views.afterlogin_view, name='afterlogin'),
+    path('predict/', views.predict_donation, name='predict_donation'),
+    path('donor-login/', views.donor_login_view, name='donor-login'),
+    path('patient-login/', views.patient_login_view, name='patient-login'),
+    path('admin-login/', views.admin_login_view, name='admin-login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('donor-dashboard/', views.donor_dashboard_view, name='donor-dashboard'),
+    path('patient-dashboard/', views.patient_dashboard_view, name='patient-dashboard'),
+    path('admin-dashboard/', views.admin_dashboard_view, name='admin-dashboard'),
+    path('admin-blood/', views.admin_blood_view, name='admin-blood'),
+    path('admin-donor/', views.admin_donor_view, name='admin-donor'),
+    path('admin-patient/', views.admin_patient_view, name='admin-patient'),
+    path('admin-request/', views.admin_request_view, name='admin-request'),
+    path('admin-request-history/', views.admin_request_history_view, name='admin-request-history'),
+    path('admin-donation/', views.admin_donation_view, name='admin-donation'),
+    path('update-approve-status/<int:pk>/', views.update_approve_status_view, name='update-approve-status'),
+    path('update-reject-status/<int:pk>/', views.update_reject_status_view, name='update-reject-status'),
+    path('update-donor/<int:pk>/', views.update_donor_view, name='update-donor'),
+    path('delete-donor/<int:pk>/', views.delete_donor_view, name='delete-donor'),
+    path('update-patient/<int:pk>/', views.update_patient_view, name='update-patient'),
+    path('delete-patient/<int:pk>/', views.delete_patient_view, name='delete-patient'),
+    path('update-blood-stock/', views.update_blood_stock, name='update-blood-stock'),
+    path('approve-donation/<int:donation_id>/', views.approve_donation, name='approve-donation'),
+    path('reject-donation/<int:donation_id>/', views.reject_donation, name='reject-donation'),
+]

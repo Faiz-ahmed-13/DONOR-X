@@ -1,0 +1,104 @@
+{% extends 'blood/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Patient Info Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card bg-dark text-white shadow-lg">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Patient Information</h4>
+                    <p class="card-text"><strong>Name:</strong> {{ patient.get_name }}</p>
+                    <p class="card-text"><strong>Blood Group:</strong> {{ patient.bloodgroup }}</p>
+                    <p class="card-text"><strong>Mobile:</strong> {{ patient.mobile }}</p>
+                    <a href="{% url 'request-blood' %}" class="btn btn-danger">
+                        <i class="fas fa-tint me-2"></i>Request Blood
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card bg-primary text-white shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Requests</h5>
+                            <p class="display-4">{{ requestmade }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card bg-warning text-dark shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Pending Requests</h5>
+                            <p class="display-4">{{ requestpending }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card bg-success text-white shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Approved Requests</h5>
+                            <p class="display-4">{{ requestapproved }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card bg-danger text-white shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Rejected Requests</h5>
+                            <p class="display-4">{{ requestrejected }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blood Request History -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0"><i class="fas fa-history me-2"></i>Blood Request History</h4>
+                </div>
+                <div class="card-body">
+                    {% if blood_requests %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Blood Group</th>
+                                    <th>Units</th>
+                                    <th>Status</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in blood_requests %}
+                                <tr>
+                                    <td>{{ request.date }}</td>
+                                    <td>{{ request.bloodgroup }}</td>
+                                    <td>{{ request.unit }}</td>
+                                    <td>
+                                        <span class="badge {% if request.status == 'Approved' %}bg-success{% elif request.status == 'Pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                                            {{ request.status }}
+                                        </span>
+                                    </td>
+                                    <td>{{ request.reason }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center">No blood requests found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

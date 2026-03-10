@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DONOR-X - Blood Bank Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {background-color: #1a1a1a;color: #ffffff;min-height: 100vh;background-image: url('{% static "homepage2.jpg" %}');background-size: cover;background-position: center;background-attachment: fixed;position: relative;}
+        body::before {content: '';position: absolute;top: 0;left: 0;right: 0;bottom: 0;background: rgba(0, 0, 0, 0.7);z-index: -1;}
+        .navbar {background-color: #000000 !important;box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
+        .navbar-brand {color: #ff4d4d !important;font-weight: bold;font-size: 1.5rem;}
+        .nav-link {color: #ffffff !important;margin: 0 10px;transition: color 0.3s ease;}
+        .nav-link:hover {color: #ff4d4d !important;}
+        .card {background-color: rgba(255, 255, 255, 0.1);backdrop-filter: blur(10px);border: 1px solid rgba(255, 255, 255, 0.2);color: #ffffff;}
+        .card-header {background: linear-gradient(45deg, #ff4d4d, #ff8080);color: white;border-bottom: none;}
+        .btn-primary {background: linear-gradient(45deg, #ff4d4d, #ff8080);border: none;transition: transform 0.3s ease;}
+        .btn-primary:hover {transform: translateY(-2px);background: linear-gradient(45deg, #ff8080, #ff4d4d);}
+        .form-control {background-color: rgba(255, 255, 255, 0.1);border: 1px solid rgba(255, 255, 255, 0.2);color: #ffffff;}
+        .form-control:focus {background-color: rgba(255, 255, 255, 0.15);border-color: #ff4d4d;color: #ffffff;}
+        select, select option {background-color: #000000 !important;color: #ffffff !important;}
+        .helptext, small.helptext, .form-text, small.form-text, p.help-block {color: #ffffff !important;}
+    </style>
+    {% block css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}"><i class="fas fa-heartbeat me-2"></i>DONOR-X</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    {% if user.is_authenticated %}
+                        {% if user.is_staff %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'admin-dashboard' %}">Admin Dashboard</a></li>
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link" href="/donor/donor-dashboard/">Donor Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/patient/patient-dashboard/">Patient Dashboard</a></li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-link btn btn-link">Logout ({{ user.username }})</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="/donor/donorlogin/">Donor Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/patient/patientlogin/">Patient Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'admin-login' %}">Admin Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">{% block content %}{% endblock %}</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block js %}{% endblock %}
+</body>
+</html>

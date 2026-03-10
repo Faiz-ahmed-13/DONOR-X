@@ -1,0 +1,156 @@
+{% extends 'blood/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Donors</h5>
+                    <h2>{{ total_donors }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Patients</h5>
+                    <h2>{{ total_patients }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Blood Requests</h5>
+                    <h2>{{ total_blood_requests }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Approved Donations</h5>
+                    <h2>{{ total_approved_donations }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blood Stock Management -->
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Blood Stock Management</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for stock in blood_stock %}
+                <div class="col-md-3 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ stock.bloodgroup }}</h5>
+                            <form method="POST" action="{% url 'admin-blood' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="bloodgroup" value="{{ stock.bloodgroup }}">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="unit" value="{{ stock.unit }}" min="0">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Donations -->
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Pending Blood Donations</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Donor</th>
+                            <th>Blood Group</th>
+                            <th>Units</th>
+                            <th>Disease</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for donation in pending_donations %}
+                        <tr>
+                            <td>{{ donation.donor.user.username }}</td>
+                            <td>{{ donation.bloodgroup }}</td>
+                            <td>{{ donation.unit }}</td>
+                            <td>{{ donation.disease|default:"None" }}</td>
+                            <td>{{ donation.date }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'approve-donation' donation.id %}" class="btn btn-success btn-sm">Approve</a>
+                                    <a href="{% url 'reject-donation' donation.id %}" class="btn btn-danger btn-sm">Reject</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No pending donations</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blood Requests -->
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Blood Requests</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Blood Group</th>
+                            <th>Units</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in blood_requests %}
+                        <tr>
+                            <td>{{ request.request_by_patient.user.username }}</td>
+                            <td>{{ request.bloodgroup }}</td>
+                            <td>{{ request.unit }}</td>
+                            <td>{{ request.reason }}</td>
+                            <td>
+                                <span class="badge {% if request.status == 'Approved' %}bg-success{% elif request.status == 'Rejected' %}bg-danger{% else %}bg-warning{% endif %}">
+                                    {{ request.status }}
+                                </span>
+                            </td>
+                            <td>{{ request.date }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No blood requests</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,66 @@
+{% extends 'blood/base.html' %}
+{% block content %}
+
+<style>
+    .success-card {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 30px;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .success-icon {
+        font-size: 4rem;
+        color: #28a745;
+        margin-bottom: 20px;
+    }
+    .donation-details {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+    .donation-details p {
+        margin-bottom: 10px;
+        font-size: 1.1em;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="success-card text-center">
+                <i class="fas fa-heart success-icon"></i>
+                <h2 class="mb-4">Thank You for Your Blood Donation!</h2>
+                <p class="lead">Your donation request has been submitted successfully. You're helping save lives!</p>
+                
+                <div class="donation-details text-left">
+                    <h4 class="mb-3">Donation Details:</h4>
+                    <p><strong>Blood Group:</strong> {{ donation.bloodgroup }}</p>
+                    <p><strong>Units Donated:</strong> {{ donation.unit }}</p>
+                    <p><strong>Status:</strong> <span class="badge bg-warning">{{ donation.status }}</span></p>
+                    <p><strong>Date:</strong> {{ donation.date|date:"F d, Y" }}</p>
+                </div>
+                
+                <div class="mt-4">
+                    <p>Our team will review your donation request and contact you for the next steps.</p>
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle"></i>
+                        Remember: You must wait at least 56 days before your next donation.
+                    </div>
+                    <div class="btn-group mt-3">
+                        <a href="{% url 'donor-dashboard' %}" class="btn btn-primary me-2">
+                            <i class="fas fa-home"></i> Go to Dashboard
+                        </a>
+                        <a href="{% url 'donation-history' %}" class="btn btn-outline-light">
+                            <i class="fas fa-history"></i> View Donation History
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %} 

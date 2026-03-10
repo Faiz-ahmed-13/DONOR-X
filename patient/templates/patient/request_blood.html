@@ -1,0 +1,61 @@
+{% extends 'blood/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-dark text-white">
+                    <h3 class="mb-0"><i class="fas fa-tint me-2"></i>Request Blood</h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Blood Group</label>
+                            <input type="text" class="form-control" value="{{ user.patient.bloodgroup }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Number of Units Required (Max: 5)</label>
+                            <input type="number" name="unit" class="form-control" min="1" max="5" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Reason for Request</label>
+                            <textarea name="reason" class="form-control" rows="3" required placeholder="Please explain why you need the blood..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" required id="emergencyCheck">
+                                <label class="form-check-label" for="emergencyCheck">
+                                    I confirm this is a genuine medical requirement
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Request
+                        </button>
+                    </form>
+
+                    <div class="mt-4">
+                        <h5>Important Information:</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">Requests are processed on a first-come, first-served basis</li>
+                            <li class="list-group-item">Emergency cases are given priority</li>
+                            <li class="list-group-item">You will be notified once your request is approved</li>
+                            <li class="list-group-item">Please provide accurate information for faster processing</li>
+                            <li class="list-group-item">Contact the blood bank directly for urgent requirements</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
